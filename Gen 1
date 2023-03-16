@@ -1,0 +1,32 @@
+"""
+Created on Wed Mar 15 18:50:05 2023
+
+Weather Application Gen 1
+
+@author: Matin
+"""
+import tkinter as tk
+from bs4 import BeautifulSoup
+import requests
+
+URL = "https://weather.com/weather/today/l/ea6f2afe6dc041d4891d207fb90f3d554cb41d898a610837e8034319f41cec5c" # URL of the site
+R = requests.get(URL)
+
+Soup = BeautifulSoup( R.content ,"html.parser" ) # parse html code
+FindTemp = Soup.find( "span" , attrs = { "data-testid" : "TemperatureValue" }) # Find the part of the code which we need
+FindStrTemp = FindTemp.string  # clear the text from html code and extract only string 
+
+root = tk.Tk()
+t = tk.StringVar()
+t.set(FindStrTemp) 
+
+tk.Label( root , text = t.get() , bg = "Black" , fg = "Gray" , 
+          justify = "left" ).grid( column = 1 , row = 0 ) # show scrapped temp information from site
+
+tk.Label( root , text = "Ashburn temperature is :" , fg = "Black" , 
+          bg = "Gray" ).grid( column = 0 , row = 0 ) # show location
+
+tk.Button( root , text = "Quit" , fg = "red" , bg = "gray" ,
+          command = root.quit ).grid( column = 0 , row = 1 ) # Quit the program
+
+root.mainloop()
